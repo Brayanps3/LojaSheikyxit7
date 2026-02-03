@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SHEIKYX7</title>
+
+<style>
+body{
+    margin:0;
+    background:black;
+    font-family:Arial;
+    color:red;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow:hidden;
+}
+
+.bg{
+    position:fixed;
+    width:200%;
+    height:200%;
+    background:radial-gradient(circle,rgba(255,0,0,.2),black 70%);
+    animation:blood 8s infinite alternate;
+    z-index:-1;
+}
+
+@keyframes blood{
+    from{transform:translate(-10%,-10%)}
+    to{transform:translate(10%,10%)}
+}
+
+.box{
+    border:2px solid red;
+    padding:20px;
+    border-radius:15px;
+    width:360px;
+    box-shadow:0 0 30px red;
+}
+
+h1{
+    text-align:center;
+    position:relative;
+    animation:glitch 1s infinite;
+}
+
+h1:before,h1:after{
+    content:"SHEIKYX7";
+    position:absolute;
+    left:0;
+    right:0;
+}
+
+h1:before{animation:glitchTop .7s infinite}
+h1:after{color:#ff0040;animation:glitchBot .6s infinite}
+
+@keyframes glitch{50%{text-shadow:-2px 2px red}}
+@keyframes glitchTop{50%{clip-path:inset(10% 0 40% 0)}}
+@keyframes glitchBot{50%{clip-path:inset(40% 0 10% 0)}}
+
+select,input,button{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:black;
+    color:red;
+    border:1px solid red;
+    border-radius:6px;
+}
+
+button{
+    background:red;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 15px red;
+}
+
+.carrinho{
+    border:1px dashed red;
+    margin-top:10px;
+    padding:10px;
+}
+
+.item{font-size:14px}
+
+.total{text-align:center;margin-top:10px}
+
+#pixBox{
+    display:none;
+    text-align:center;
+    margin-top:10px;
+    border:1px dashed red;
+    padding:10px;
+}
+
+#infoProduto{
+    margin-top:10px;
+    border:1px dashed red;
+    padding:8px;
+    font-size:13px;
+    min-height:120px;
+    animation:type 3s infinite alternate;
+}
+
+@keyframes type{
+    from{opacity:.5}
+    to{opacity:1}
+}
+
+.avaliacoes{
+    border:1px dashed red;
+    margin-top:10px;
+    padding:8px;
+    font-size:12px;
+}
+
+.star{color:red}
+
+img{margin-top:10px;animation:pulse 2s infinite}
+@keyframes pulse{50%{filter:brightness(2)}}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="box">
+
+<h1>SHEIKYX7</h1>
+
+<select id="produto" onchange="mostrarInfo()">
+<option value="Sensi" data-preco="5">Sensi — R$5</option>
+<option value="Xit Permanente iOS IPA" data-preco="35">Xit iOS IPA — R$35</option>
+<option value="Métodos Todos Celulares" data-preco="15">Métodos Todos Celulares — R$15</option>
+</select>
+
+<div id="infoProduto"></div>
+
+<div class="avaliacoes">
+<b>⭐ Avaliações (exemplo visual)</b><br>
+<span class="star">★★★★★</span> João – “Muito bom”<br>
+<span class="star">★★★★★</span> Lucas – “Funcionou certinho”<br>
+<span class="star">★★★★★</span> Rafa – “Entrega rápida”
+</div>
+
+<button onclick="add()">Adicionar</button>
+
+<div class="carrinho" id="lista"></div>
+
+<div class="total">Total R$ <span id="total">0</span></div>
+
+<button onclick="limparCarrinho()">LIMPAR CARRINHO</button>
+
+<input id="nome" placeholder="Nome completo">
+
+<button onclick="finalizar()">FINALIZAR</button>
+
+<div id="pixBox">
+<p>Total: R$ <span id="valorFinal"></span></p>
+<b>bryansupercell34@gmail.com</b><br><br>
+<button onclick="copiar()">Copiar Pix</button>
+<img id="qr" width="180">
+</div>
+
+</div>
+
+<audio id="addSound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-changing-tab-206.wav"></audio>
+<audio id="finalSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-level-completed-2059.wav"></audio>
+<audio id="delSound" src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-lose-2027.wav"></audio>
+
+<script>
+
+const pix="bryansupercell34@gmail.com";
+const whatsapp="54996491635";
+
+let carrinho=JSON.parse(localStorage.getItem("cart")||"[]");
+let total=0;
+
+mostrarInfo();
+render();
+
+function mostrarInfo(){
+    let v=produto.value;
+    let box=document.getElementById("infoProduto");
+    if(v==="Sensi"){
+        box.innerHTML=`🔥 SENSI<br>✔ Precisão melhorada<br>✔ Anti recoil<br><br>📦 Vem:<br>• Config pronta<br>• Tutorial`;
+    } else if(v==="Xit Permanente iOS IPA"){
+        box.innerHTML=`🔥 XIT IOS IPA<br>✔ Permanente<br>✔ Atualizações<br>✔ Suporte<br><br>📦 Vem:<br>• IPA<br>• Tutorial<br>• Suporte`;
+    } else if(v==="Métodos Todos Celulares"){
+        box.innerHTML=`🔥 MÉTODOS TODOS CELULARES<br>✔ Android/iOS<br>✔ Técnicas secretas<br><br>📦 Vem:<br>• Pack métodos<br>• Dicas<br>• Prints`;
+    }
+}
+
+function add(){
+    addSound.play();
+    let p=produto.options[produto.selectedIndex];
+    carrinho.push({nome:p.value,preco:parseInt(p.dataset.preco)});
+    localStorage.setItem("cart",JSON.stringify(carrinho));
+    render();
+}
+
+function render(){
+    lista.innerHTML="";
+    total=0;
+    carrinho.forEach((i,index)=>{
+        total+=i.preco;
+        lista.innerHTML+=`
+        <div class="item">
+            ✔ ${i.nome} — R$${i.preco}
+            <span style="float:right;cursor:pointer" onclick="remover(${index})">❌</span>
+        </div>`;
+    });
+    document.getElementById("total").innerText=total;
+}
+
+function remover(i){
+    delSound.play();
+    carrinho.splice(i,1);
+    localStorage.setItem("cart",JSON.stringify(carrinho));
+    render();
+}
+
+function limparCarrinho(){
+    carrinho=[];
+    localStorage.removeItem("cart");
+    render();
+}
+
+function copiar(){
+    navigator.clipboard.writeText(pix + " | R$" + total);
+    alert("PIX copiado: "+pix+" | R$"+total);
+}
+
+function finalizar(){
+    if(!nome.value) return alert("Digite nome");
+    if(carrinho.length==0) return alert("Carrinho vazio");
+
+    finalSound.play();
+    valorFinal.innerText=total;
+    pixBox.style.display="block";
+
+    qr.src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX%3A"+encodeURIComponent(pix)+"%20R%24"+total;
+
+    let itens=carrinho.map(i=>`• ${i.nome} R$${i.preco}`).join("\n");
+    let msg=`SHEIKYX7\n\nNome: ${nome.value}\n\nItens:\n${itens}\n\nTotal: R$ ${total}`;
+    
+    window.open("https://wa.me/"+whatsapp+"?text="+encodeURIComponent(msg),"_blank");
+}
+
+</script>
+
+</body>
+</html>
